@@ -27,30 +27,18 @@ jobs:
         sudo timedatectl set-timezone "Asia/Shanghai"
     - name: Combine
       run: |
-        # APNIC_URL="https://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest"
-        # curl -sSL -4 --connect-timeout 10 $APNIC_URL -o apnic.txt
-        # apnic="$(curl -kLfsm 5 https://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest)"
-        # echo -e "${apnic}"  > apnic.txt
-        # apnic="$(echo -e ${APNIC} | grep ipv4 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' )} )"
-        # apnic="$( a=echo -e "${curl -kLfsm 5 https://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest}" | grep ipv4 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' )} )" 
-        # cat apnic.txt | grep ipv4 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > apnictmp_V4
-        # apnic=$(cat apnictmp_V4)
         qqwry="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/metowolf/iplist@master/data/special/china.txt)"
         ipipnet="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/17mon/china_ip_list@master/china_ip_list.txt)"
         clang="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn.txt)"
-        chunzhen="https://github.com/metowolf/iplist/raw/master/data/special/china.txt"
         chunzhen="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/metowolf/iplist@master/data/special/china.txt)"
         iplist="$qqwry\n$ipipnet\n$clang\n$chunzhen"
         echo -e "${iplist}" | sort | uniq > all_cn.txt
         clang="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_ipv6.txt)"
-        # cat apnic.txt | grep ipv6 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, $5) }' > apnictmp_V6
-        # apnic=$(cat apnictmp_V6)
         iplist="$clang"
         echo -e "${iplist}" | sort | uniq > all_cn_ipv6.txt
         clang="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt)"
         iplist="$clang"
         echo -e "${iplist}" | sort | uniq > gfwlist.txt
-        # rm -rf  apnic*
     - name: Apply
       run: |
         Emoji=("🎉" "🤞" "✨" "🎁" "🎈" "🎄" "🎨" "💋" "🍓" "🍕" "🍉" "💐" "🌴" "🚀" "🛸" "🗽" "⛅" "🌈" "🔥" "⛄" "🐶" "🏅" "🦄" "🐤")
