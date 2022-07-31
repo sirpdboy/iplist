@@ -27,10 +27,12 @@ jobs:
         sudo timedatectl set-timezone "Asia/Shanghai"
     - name: Combine
       run: |
-        APNIC_URL="https://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest"
-        curl -sSL -4 --connect-timeout 10 $APNIC_URL -o apnic.txt
-        #apnic="$(echo -e ${APNIC} | grep ipv4 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' )} )"
-        #apnic="$( a=echo -e "${curl -kLfsm 5 https://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest}" | grep ipv4 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' )} )" 
+        # APNIC_URL="https://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest"
+        # curl -sSL -4 --connect-timeout 10 $APNIC_URL -o apnic.txt
+        apnic="$(curl -kLfsm 5 https://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest)"
+        echo -e "${apnic}"  > apnic.txt
+        # apnic="$(echo -e ${APNIC} | grep ipv4 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' )} )"
+        # apnic="$( a=echo -e "${curl -kLfsm 5 https://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest}" | grep ipv4 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' )} )" 
         cat apnic.txt | grep ipv4 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > apnictmp_V4
         apnic=$(cat apnictmp_V4)
         qqwry="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/metowolf/iplist@master/data/special/china.txt)"
