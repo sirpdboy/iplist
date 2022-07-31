@@ -15,12 +15,12 @@ jobs:
         uses: GitRML/delete-workflow-runs@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          retain_days: 3
+          retain_days: 1
 
       - name: Delete workflow runs2
         uses: GitRML/delete-workflow-runs@main
         with:
-          retain_days: 3
+          retain_days: 1
           keep_minimum_runs: 1
           
       - name: Delete workflow runs3
@@ -28,4 +28,4 @@ jobs:
         with:
           token: ${{ secrets.AUTH_PAT }}
           repository: ${{ github.repository }}
-          retain_days: 3
+          retain_days: 1
