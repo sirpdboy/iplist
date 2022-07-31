@@ -10,9 +10,22 @@ jobs:
   Delete-Workflow-Archive:
     runs-on: ubuntu-latest
     steps:
-      - name: Delete Workflow Runs
+      - name: Delete Workflow Runs1
         id: workflow
         uses: GitRML/delete-workflow-runs@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          retain_days: 7
+          retain_days: 3
+
+      - name: Delete workflow runs2
+        uses: GitRML/delete-workflow-runs@main
+        with:
+          retain_days: 3
+          keep_minimum_runs: 1
+          
+      - name: Delete workflow runs3
+        uses: GitRML/delete-workflow-runs@main
+        with:
+          token: ${{ secrets.AUTH_PAT }}
+          repository: ${{ github.repository }}
+          retain_days: 3
