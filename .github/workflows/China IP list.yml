@@ -33,18 +33,21 @@ jobs:
         clang="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_ipv6.txt)"
         iplist="$clang"
         echo -e "${iplist}" | sort | uniq > all_cn_ipv6.txt
-        clang="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt)"
-        iplist="$clang"
-        echo -e "${iplist}" | sort | uniq > gfwlist.txt
+        loukky="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loukky/gfwlist-by-loukky/gfwlist.txt)"
+        echo "$loukky" | base64 -d > gfwlist.tmp
+        loukky=`cat gfwlist.tmp`
+        gfwlist="$(curl -kLfsm 5 https://gitlab.com/gfwlist/gfwlist/raw/master/gfwlist.txt)"
+        echo "$gfwlist" | base64 -d > gfwlist.tmp
+        gfwlist=`cat gfwlist.tmp`
+        clang="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt)" 
+        iplist="$loukky\n$gfwlist\n$clang"
+        echo -e "${iplist}" | sort | uniq > gfwlist.tmp
+        cat gfwlist.tmp | base64 > gfwlist.txt
+        rm -rf gfwlist.tmp
     - name: Apply
       run: |
         Emoji=("🎉" "🤞" "✨" "🎁" "🎈" "🎄" "🎨" "💋" "🍓" "🍕" "🍉" "💐" "🌴" "🚀" "🛸" "🗽" "⛅" "🌈" "🔥" "⛄" "🐶" "🏅" "🦄" "🐤")
         git add .
         git commit -m "${Emoji[$[$RANDOM % ${#Emoji[@]}]]} Sync $(date +%Y-%m-%d" "%H:%M:%S)"
         git push -f
-        
-    - name: Delete workflow runs
-      uses: GitRML/delete-workflow-runs@main
-      with:
-          retain_days: 2
-          keep_minimum_runs: 3
+
