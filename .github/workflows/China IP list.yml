@@ -25,6 +25,7 @@ jobs:
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
         sudo timedatectl set-timezone "Asia/Shanghai"
+        
     - name: Combine
       run: |
         qqwry="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/metowolf/iplist@master/data/special/china.txt)"
@@ -47,10 +48,16 @@ jobs:
         echo -e "${iplist}" | sort | uniq  | base64 > gfwlist.txt
         # cat gfwlist.tmp | base64 > gfwlist.txt
         # rm -rf gfwlist.tmp
+
     - name: Apply
       run: |
         Emoji=("🎉" "🤞" "✨" "🎁" "🎈" "🎄" "🎨" "💋" "🍓" "🍕" "🍉" "💐" "🌴" "🚀" "🛸" "🗽" "⛅" "🌈" "🔥" "⛄" "🐶" "🏅" "🦄" "🐤")
         git add .
         git commit -m "${Emoji[$[$RANDOM % ${#Emoji[@]}]]} Sync $(date +%Y-%m-%d" "%H:%M:%S)"
         git push -f
-
+        
+    - name: Delete workflow runs
+      uses: GitRML/delete-workflow-runs@main
+      with:
+          retain_days: 1
+          keep_minimum_runs: 1
