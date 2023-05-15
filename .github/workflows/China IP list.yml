@@ -1,13 +1,10 @@
 name: China IP list
-
-on: 
-  # push: 
-  #   branches:
-  #     - master
-  watch:
-    types: started
+on:
   schedule:
-    - cron: 0 1 * * * 
+    - cron: 0 20 * * *
+
+permissions:
+  contents: read
 
 jobs:
   build:
