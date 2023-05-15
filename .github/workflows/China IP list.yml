@@ -1,5 +1,8 @@
 name: China IP list
 on:
+
+  watch:
+    types: started
   schedule:
     - cron: 0 20 * * *
 
