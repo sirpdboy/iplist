@@ -39,14 +39,14 @@ jobs:
         #loukky="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loukky/gfwlist-by-loukky/gfwlist.txt)"
         #echo "$loukky" | base64 -d > gfwlist.tmp
         #loukky=`cat gfwlist.tmp`
-        gfwlist="$(curl -kLfsm 5 https://gitlab.com/gfwlist/gfwlist/raw/master/gfwlist.txt)"
-        echo "$gfwlist" | base64 -d > gfwlist.tmp
-        gfwlist=`cat gfwlist.tmp`
+        #gfwlist="$(curl -kLfsm 5 https://gitlab.com/gfwlist/gfwlist/raw/master/gfwlist.txt)"
+        #echo "$gfwlist" | base64 -d > gfwlist.tmp
+        #gfwlist=`cat gfwlist.tmp`
         clang="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt)" 
-        iplist="$gfwlist\n$clang"
-        echo -e "${iplist}" | sort | uniq > gfwlist.tmp
-        cat gfwlist.tmp | base64 > gfwlist.txt
-        rm -rf gfwlist.tmp
+        iplist="$clang"
+        echo -e "${iplist}" | sort | uniq  | base64 > gfwlist.txt
+        # cat gfwlist.tmp | base64 > gfwlist.txt
+        # rm -rf gfwlist.tmp
     - name: Apply
       run: |
         Emoji=("🎉" "🤞" "✨" "🎁" "🎈" "🎄" "🎨" "💋" "🍓" "🍕" "🍉" "💐" "🌴" "🚀" "🛸" "🗽" "⛅" "🌈" "🔥" "⛄" "🐶" "🏅" "🦄" "🐤")
