@@ -45,8 +45,8 @@ jobs:
         echo "$gfwlist" | base64 -d > gfwlist.tmp
         gfwlist=`cat gfwlist.tmp`
         clang="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt)" 
-        iplist="$clang"
-        echo -e "$gfwlist\n${iplist}" | sort | uniq  | base64 > gfwlist.tmp
+        iplist="$gfwlist\n$clang"
+        echo -e "${iplist}" | sort | uniq  | base64 > gfwlist.tmp
         cat gfwlist.tmp | base64 > gfwlist.txt
         rm -rf gfwlist.tmp
 
