@@ -20,6 +20,10 @@ jobs:
       with:
         fetch-depth: 0
 
+    - uses: de-vri-es/setup-git-credentials@v2
+      with:
+        credentials: https://sirpdboy:${{ secrets.REPO_TOKEN }}@github.com/
+    
     - name: Set git identity
       run : |
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -54,10 +58,19 @@ jobs:
         Emoji=("🎉" "🤞" "✨" "🎁" "🎈" "🎄" "🎨" "💋" "🍓" "🍕" "🍉" "💐" "🌴" "🚀" "🛸" "🗽" "⛅" "🌈" "🔥" "⛄" "🐶" "🏅" "🦄" "🐤")
         git add .
         git commit -m "${Emoji[$[$RANDOM % ${#Emoji[@]}]]} Sync $(date +%Y-%m-%d" "%H:%M:%S)"
+        for pkg in $(git diff-tree --no-commit-id --name-only HEAD); do
+          if [ "$(grep "PKG_RELEASE" $pkg/Makefile)" ]; then
+            sed -i "s/PKG_RELEASE:=.*/PKG_RELEASE:=$(git rev-list --count master $pkg)/" $pkg/Makefile || true
+          fi
+        done
+        git reset --soft HEAD^
+        git add .
+        git commit -m "${Emoji[$[$RANDOM % ${#Emoji[@]}]]} Sync $(date +%Y-%m-%d" "%H:%M:%S)"
         git push -f
-        
+
     - name: Delete workflow runs
-      uses: GitRML/delete-workflow-runs@main
+      uses: Mattraks/delete-workflow-runs@main
+      continue-on-error: true
       with:
-          retain_days: 1
-          keep_minimum_runs: 1
+        retain_days: 1
+        keep_minimum_runs: 3
