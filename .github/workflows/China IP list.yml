@@ -43,15 +43,15 @@ jobs:
         soldier="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt)"
         # gfwlist="$(curl -kLfsm 5 https://gitlab.com/gfwlist/gfwlist/raw/master/gfwlist.txt)"
         # gfwlist=`echo "$gfwlist" | base64 -d `
-        # YW5v="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt)"
-        # YW5=`echo "$YW5v" | base64 -d `
+        YW5v="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt)"
+        YW5=`echo "$YW5v" | base64 -d `
         # clang="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt)" 
-        # iplist="$YW5\n$soldier\n$gfwlist\n$clang"
-        echo -e "${soldier}" | sort | uniq  > gfwlist.tmp
+        iplist="$YW5\n$soldier\n$gfwlist\n$clang"
+        echo -e "${iplist}" | sort | uniq  > gfwlist.txt
         # echo -e "${iplist}" | sort | uniq | base64 > gfwlist.txt
-        #echo -e "${iplist}" | sort | uniq  > gfwlist.tmp
-        cat gfwlist.tmp | base64 > gfwlist.txt
-        rm -rf gfwlist.tmp
+        # echo -e "${iplist}" | sort | uniq  > gfwlist.tmp
+        # cat gfwlist.tmp | base64 > gfwlist.txt
+        # rm -rf gfwlist.tmp
         echo  " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass " > README.md
 
     - name: Apply
