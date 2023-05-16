@@ -29,28 +29,26 @@ jobs:
     - name: Combine
       run: |
         qqwry="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/metowolf/iplist@master/data/special/china.txt)"
-        cidr="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_cidr.txt)"
+        # cidr="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_cidr.txt)"
         cid="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn.txt)"
         ipipnet="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/17mon/china_ip_list@master/china_ip_list.txt)"
-        geoip="$(curl -kLfsm 5 https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/text/cn.txt)"
+        geoip="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loyalsoldier/geoip@release/text/cn.txt)"
         chunzhen="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china.txt)"
-        iplist="$geoip\n$cidr\n$ipipnet\n$qqwry\n$cid\n$chunzhen"
+        iplist="$geoip\n$ipipnet\n$qqwry\n$cid\n$chunzhen"
         echo -e "${iplist}" | sort | uniq > all_cn.txt
         operator="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china6.txt)"
         clang="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_ipv6.txt)"
         iplist="$operator\n$clang"
         echo -e "${iplist}" | sort | uniq > all_cn_ipv6.txt
-        soldier="$(curl -kLfsm 5 https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt)"
-        #echo "$loukky" | base64 -d > gfwlist.tmp
-        #loukky=`cat gfwlist.tmp`
+        soldier="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt)"
         gfwlist="$(curl -kLfsm 5 https://gitlab.com/gfwlist/gfwlist/raw/master/gfwlist.txt)"
-        echo "$gfwlist" | base64 -d > gfwlist.tmp
-        gfwlist=`cat gfwlist.tmp`
+        gfwlist=`echo "$gfwlist" | base64 -d `
         clang="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt)" 
         iplist="$soldier\n$gfwlist\n$clang"
-        echo -e "${iplist}" | sort | uniq  > gfwlist.tmp
-        cat gfwlist.tmp | base64 > gfwlist.txt
-        rm -rf gfwlist.tmp
+        echo -e "${iplist}" | sort | uniq | base64 > gfwlist.txt
+        #echo -e "${iplist}" | sort | uniq  > gfwlist.tmp
+        #cat gfwlist.tmp | base64 > gfwlist.txt
+        #rm -rf gfwlist.tmp
         echo  " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass " > README.md
 
     - name: Apply
