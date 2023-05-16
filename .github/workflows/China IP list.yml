@@ -28,11 +28,6 @@ jobs:
         git config --global user.name "github-actions[bot]"
         sudo timedatectl set-timezone "Asia/Shanghai"
       shell: bash
-
-    - name: Checkout the "hidden" branch of this repo
-      uses: actions/checkout@v3
-      with:
-          ref: hidden
     - name: Combine
       run: |
         qqwry="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/metowolf/iplist@master/data/special/china.txt)"
