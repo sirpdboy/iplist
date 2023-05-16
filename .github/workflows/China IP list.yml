@@ -1,16 +1,16 @@
 name: China IP list
 on:
-
-  watch:
-    types: started
+  workflow_dispatch:
   schedule:
-    - cron: 0 20 * * *
-
+    - cron: "0 22 * * *"
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**/README.md"
 jobs:
   build:
-    if: github.event.repository.owner.id == github.event.sender.id
-    runs-on: Ubuntu-20.04
-
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v3
