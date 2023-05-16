@@ -17,6 +17,10 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Set variables
+      run: |
+          echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+          echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
     - uses: de-vri-es/setup-git-credentials@v2
       with:
         credentials: https://sirpdboy:${{ secrets.REPO_TOKEN }}@github.com/
@@ -51,7 +55,17 @@ jobs:
         echo -e "${iplist}" | sort | uniq  > gfwlist.txt
         rm -rf gfwlist.tmp
         echo  " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass " > README.md
-
+    - name: Release and upload assets
+      uses: softprops/action-gh-release@v0.1.6
+      with:
+          name: Released on $(date +%Y%m%d%H%M)
+          tag_name: $(date +%Y%m%d%H%M)
+          draft: false
+          prerelease: false
+          files: |
+            .
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Apply
       run: |
         # git add .
@@ -62,6 +76,14 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m " Sync Update $(date +%Y-%m-%d" "%H:%M:%S)"
-          git push -f
+          # git commit -m " Sync Update $(date +%Y-%m-%d" "%H:%M:%S)"
+          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          git push -f -u origin release
+          # git push -f
 
+    - name: Purge jsdelivr CDN
+      run: |
+          cd publish || exit 1
+          for file in $(ls *.txt); do
+            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/${file}"
+          done
