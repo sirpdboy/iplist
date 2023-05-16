@@ -23,6 +23,7 @@ jobs:
       run: |
           echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+          echo "FILE=$PWD" >> $GITHUB_ENV
     - uses: de-vri-es/setup-git-credentials@v2
       with:
         credentials: https://sirpdboy:${{ secrets.REPO_TOKEN }}@github.com/
@@ -57,27 +58,25 @@ jobs:
         echo -e "${iplist}" | sort | uniq  > gfwlist.txt
         rm -rf gfwlist.tmp
         echo  " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass " > README.md
-    - name: Release and upload assets
-      uses: softprops/action-gh-release@v0.1.6
+        
+    - name: Upload firmware to release
+      uses: softprops/action-gh-release@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           name: ${{ env.RELEASE_NAME }}
           tag_name: ${{ env.TAG_NAME }}
-          draft: false
-          prerelease: false
-          files: |
-            $GITHUB_WORKSPACE/*
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          files: ${{ env.FILE }}/*
+          
     - name: Git push assets to "release" branch
       run: |
 
           git init
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-           git add .
-           git commit -m " Sync Update $(date +%Y-%m-%d" "%H:%M:%S)"
-           git push -f
+          git add .
+          git commit -m " Sync Update $(date +%Y-%m-%d" "%H:%M:%S)"
+          git push -f
 
           git checkout -b release
           git add *.txt README.md
@@ -90,3 +89,23 @@ jobs:
           for file in $(ls); do
             curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/${file}"
           done
+
+    - name: Delete workflow runs
+      uses: Mattraks/delete-workflow-runs@v2
+      with:
+          retain_days: 1
+          keep_minimum_runs: 1
+
+    - name: Remove old Releases
+      uses: dev-drprasad/delete-older-releases@v0.2.1
+      with:
+          keep_latest: 1
+          delete_tags: true
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Delete Artifacts
+      uses: geekyeggo/delete-artifact@v2
+      with:
+         name: |
+            bin-archive
