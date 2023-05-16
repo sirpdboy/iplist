@@ -53,7 +53,7 @@ jobs:
         YW5="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt)"
         echo "$YW5" | base64 -d  > gfwlist.tmp
         sed -i '/^@@|/d;#!##/d;g#\!##/d' gfwlist.tmp
-        YW=`cat gfwlist.tmp | sed 's#!.\+##; s#|##g; s#||##g;s#@##g; s#http:\/\/##; s#https:\/\/##;' | sort -u`
+        YW=`cat gfwlist.tmp | sed 's#!.\+##; s#@##g; s#http:\/\/##; s#https:\/\/##;' | sort -u`
         iplist="$YW\n$soldier"
         echo -e "${iplist}" | sort | uniq  > gfwlist.txt
         rm -rf gfwlist.tmp
