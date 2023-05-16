@@ -10,12 +10,14 @@ on:
     #  - "**/README.md"
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
+   name: Build
+   runs-on: ubuntu-latest
+
+   steps:
+    - name: Checkout codebase
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0
+          path: code
 
     - name: Set variables
       run: |
@@ -55,26 +57,17 @@ jobs:
         echo -e "${iplist}" | sort | uniq  > gfwlist.txt
         rm -rf gfwlist.tmp
         echo  " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass " > README.md
-    - name: Release and upload assets
-      uses: softprops/action-gh-release@v0.1.6
-      with:
-          name: ${{ env.RELEASE_NAME }}
-          tag_name: ${{ env.TAG_NAME }}
-          draft: false
-          prerelease: false
-          files: |
-           $GITHUB_WORKSPACE/*
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Apply
+
+
+    - name: Git push assets to "release" branch
       run: |
 
           git init
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m " Sync Update $(date +%Y-%m-%d" "%H:%M:%S)"
-          git push -f
+          # git add .
+          # git commit -m " Sync Update $(date +%Y-%m-%d" "%H:%M:%S)"
+          # git push -f
 
           git checkout -b release
           git add *.txt
