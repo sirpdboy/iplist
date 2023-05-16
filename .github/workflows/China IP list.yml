@@ -67,6 +67,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           # git checkout -b release
+          echo  " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass " > README.md
           git add .
           git commit -m " Sync $(date +%Y-%m-%d" "%H:%M:%S)"
           # git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
