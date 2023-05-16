@@ -58,12 +58,12 @@ jobs:
     - name: Release and upload assets
       uses: softprops/action-gh-release@v0.1.6
       with:
-          name: Released on $(date +%Y%m%d%H%M)
-          tag_name: $(date +%Y%m%d%H%M)
+          name: ${{ env.RELEASE_NAME }}
+          tag_name: ${{ env.TAG_NAME }}
           draft: false
           prerelease: false
           files: |
-            .
+           $GITHUB_WORKSPACE/*
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Apply
