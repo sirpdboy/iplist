@@ -69,8 +69,9 @@ jobs:
           # git checkout -b release
           git add .
           git commit -m " Sync $(date +%Y-%m-%d" "%H:%M:%S)"
-          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
-          git push -f -u origin release
+          # git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          # git push -f -u origin release
+          git push -f
 
     - name: Purge jsdelivr CDN
       run: |
