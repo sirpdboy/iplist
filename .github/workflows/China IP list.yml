@@ -78,8 +78,8 @@ jobs:
           git add .
           # git commit -m " Sync Update $(date +%Y-%m-%d" "%H:%M:%S)"
           git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
-          git push -f -u origin release
-          # git push -f
+          # git push -f -u origin release
+          git push -f
 
     - name: Purge jsdelivr CDN
       run: |
