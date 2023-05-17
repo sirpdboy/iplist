@@ -51,21 +51,24 @@ jobs:
         clang="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_ipv6.txt)"
         iplist="$operator\n$clang"
         echo -e "${iplist}" | sort | uniq > all_cn_ipv6.txt 
+        
         soldier="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt)"
-        gfwlist="$(curl -kLfsm 5 https://gitlab.com/gfwlist/gfwlist/raw/master/gfwlist.txt)"
-        gfwlist=`echo "$gfwlist" | base64 -d `
-        # YW5="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt)"
-        iplist="$gfwlist\n$soldier" | sed -i '/^@@|/d;#!##/d;g#\!##/d' | sed 's#!.\+##; s#@##g; s#http:\/\/##; s#https:\/\/##;' | sort -u
+        # gfwlist="$(curl -kLfsm 5 https://gitlab.com/gfwlist/gfwlist/raw/master/gfwlist.txt)"
+        # gfwlist=`echo "$gfwlist" | base64 -d `
+        YW5="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt)"
+        iplist="$YW5\n$soldier"
         # echo "$YW5" | base64 -d  > gfwlist.tmp
-        # sed -i '/^@@|/d;#!##/d;g#\!##/d' gfwlist.tmp
+        # sed -i '/^@@|/d;#!##/d;g#\!##/d' gfwlist.tmp 
+        # sed -i '/^@@|/d;#!##/d;g#\!##/d' | sed 's#!.\+##; s#@##g; s#http:\/\/##; s#https:\/\/##;' | sort -u
         # YW=`cat gfwlist.tmp | sed 's#!.\+##; s#@##g; s#http:\/\/##; s#https:\/\/##;' | sort -u`
-        # iplist="$YW\n$soldier"
+        # iplist="$gfwlist\n$gfwlist\n$soldier"
         echo -e "${iplist}" | sort | uniq  > gfwlist.txt
+        sed -i '/^@@|/d;#!##/d;g#\!##/d' gfwlist.txt
         
         v4=`cat all_cn.txt | wc -l `
         v6=`cat all_cn_ipv6.txt  | wc -l `
         gfw=`cat gfwlist.txt | wc -l `
-        echo  " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw" > README.md
+        echo -ne " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw" > README.md
         rm -rf gfwlist.tmp
         
     - name: Upload firmware to release
