@@ -33,6 +33,7 @@ jobs:
       shell: bash
     - name: Combine
       run: |
+        
         # qqwry="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/metowolf/iplist@master/data/special/china.txt)"
         # cidr="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_cidr.txt)"
         # cid="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn.txt)"
@@ -60,8 +61,12 @@ jobs:
         # YW=`cat gfwlist.tmp | sed 's#!.\+##; s#@##g; s#http:\/\/##; s#https:\/\/##;' | sort -u`
         # iplist="$YW\n$soldier"
         echo -e "${iplist}" | sort | uniq  > gfwlist.txt
+        
+        v4=`cat all_cn.txt | wc -l `
+        v6=`cat all_cn_ipv6.txt  | wc -l `
+        gfw=`cat gfwlist.txt | wc -l `
+        echo  " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw" > README.md
         rm -rf gfwlist.tmp
-        echo  " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass " > README.md
         
     - name: Upload firmware to release
       uses: softprops/action-gh-release@v1
