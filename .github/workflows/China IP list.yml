@@ -63,7 +63,7 @@ jobs:
         # YW=`cat gfwlist.tmp | sed 's#!.\+##; s#@##g; s#http:\/\/##; s#https:\/\/##;' | sort -u`
         # iplist="$gfwlist\n$gfwlist\n$soldier"
         echo -e "${iplist}" | sort | uniq  > gfwlist.txt
-        sed -i '/^@@|/d;#!##/d;g#\!##/d' gfwlist.txt
+        #sed -i '/^@@|/d;#!##/d;g#\!##/d' gfwlist.txt
         
         v4=`cat all_cn.txt | wc -l `
         v6=`cat all_cn_ipv6.txt  | wc -l `
