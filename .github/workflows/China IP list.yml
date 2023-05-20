@@ -56,9 +56,9 @@ jobs:
         # gfwlist="$(curl -kLfsm 5 https://gitlab.com/gfwlist/gfwlist/raw/master/gfwlist.txt)"
         # gfwlist=`echo "$gfwlist" | base64 -d `
         YW5="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt)"
-        iplist="$YW5\n$soldier"
         # echo "$YW5" | base64 -d  > gfwlist.tmp
         # sed -i '/^@@|/d;#!##/d;g#\!##/d' gfwlist.tmp 
+        iplist="$YW5"
         # sed -i '/^@@|/d;#!##/d;g#\!##/d' | sed 's#!.\+##; s#@##g; s#http:\/\/##; s#https:\/\/##;' | sort -u
         # YW=`cat gfwlist.tmp | sed 's#!.\+##; s#@##g; s#http:\/\/##; s#https:\/\/##;' | sort -u`
         # iplist="$gfwlist\n$gfwlist\n$soldier"
