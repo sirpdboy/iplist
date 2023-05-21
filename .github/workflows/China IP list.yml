@@ -64,14 +64,14 @@ jobs:
         # iplist="$gfwlist\n$gfwlist\n$soldier"
         echo -e "${iplist}" | sort | uniq  > gfwlist.txt
         #sed -i '/^@@|/d;#!##/d;g#\!##/d' gfwlist.txt
-        ad="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-smartdns.conf)"
-        iplist=`echo $ad | sed  '/^#/d' `
-        echo -e "${iplist}" |sort | uniq  > ad-smartdns.txt
+        ads="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-smartdns.conf)"
+        iplist=`echo $ads | sed '/^#/d`
+        echo -e $iplist | sort | uniq  > ad_smartdns.txt
         v4=`cat all_cn.txt | wc -l `
         v6=`cat all_cn_ipv6.txt  | wc -l `
         gfw=`cat gfwlist.txt | wc -l `
-        ads=`cat ad-smartdns.txt | wc -l `
-        echo -ne " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw \n AD_smartdns:$ads" > README.md
+        ads=`cat ad_smartdns.txt | wc -l `
+        echo -e " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw \n AD_smartdns:$ads" > README.md
         rm -rf gfwlist.tmp
         
     - name: Upload firmware to release
