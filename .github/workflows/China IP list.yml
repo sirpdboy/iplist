@@ -22,26 +22,13 @@ jobs:
           echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           echo "FILE=$PWD" >> $GITHUB_ENV
+          sudo timedatectl set-timezone "Asia/Shanghai"
     - uses: de-vri-es/setup-git-credentials@v2
       with:
         credentials: https://sirpdboy:${{ secrets.REPO_TOKEN }}@github.com/
-    - name: Set variables
-      run: |
-        #git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        #git config --global user.name "github-actions[bot]"
-        sudo timedatectl set-timezone "Asia/Shanghai"
-      shell: bash
+
     - name: Combine
       run: |
-        
-        # qqwry="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/metowolf/iplist@master/data/special/china.txt)"
-        # cidr="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_cidr.txt)"
-        # cid="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn.txt)"
-        # ipipnet="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/17mon/china_ip_list@master/china_ip_list.txt)"
-        # geoip="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loyalsoldier/geoip@release/text/cn.txt)"
-        # chunzhen="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china.txt)"
-        # iplist="$geoip\n$ipipnet\n$qqwry\n$cid\n$chunzhen"
-        
         cid="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn.txt)"
         ipipnet="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/17mon/china_ip_list@master/china_ip_list.txt)"
         chunzhen="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china.txt)"
@@ -51,7 +38,6 @@ jobs:
         clang="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_ipv6.txt)"
         iplist="$operator\n$clang"
         echo -e "${iplist}" | sort | uniq > all_cn_ipv6.txt 
-        
         soldier="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt)"
         # gfwlist="$(curl -kLfsm 5 https://gitlab.com/gfwlist/gfwlist/raw/master/gfwlist.txt)"
         # gfwlist=`echo "$gfwlist" | base64 -d `
@@ -64,9 +50,9 @@ jobs:
         # iplist="$gfwlist\n$gfwlist\n$soldier"
         echo -e "${iplist}" | sort | uniq  > gfwlist.txt
         #sed -i '/^@@|/d;#!##/d;g#\!##/d' gfwlist.txt
-        ads="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-smartdns.conf)"
-        iplist=`echo $ads | sed '/^#/d`
-        echo -e $iplist | sort | uniq  > ad_smartdns.txt
+        ads=$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-smartdns.conf)
+        #iplist=$(echo $ads | sed '/^#/d)
+        echo -e $ads | sort | uniq  > ad_smartdns.txt
         v4=`cat all_cn.txt | wc -l `
         v6=`cat all_cn_ipv6.txt  | wc -l `
         gfw=`cat gfwlist.txt | wc -l `
