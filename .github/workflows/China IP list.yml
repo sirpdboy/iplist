@@ -33,7 +33,7 @@ jobs:
         # ADS="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-smartdns.conf )"
         #curl -kLfsm 3 -o ad_smartdns.txt https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-smartdns.conf
         curl -fsSL https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-smartdns.conf > ./ad_smartdns.txt
-        sed -i '/^#/d ad_smartdns.txt
+        sed -i '/^#/d' ad_smartdns.txt
         cid="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn.txt)"
         ipipnet="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/17mon/china_ip_list@master/china_ip_list.txt)"
         chunzhen="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china.txt)"
