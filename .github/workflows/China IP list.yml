@@ -64,11 +64,14 @@ jobs:
         # iplist="$gfwlist\n$gfwlist\n$soldier"
         echo -e "${iplist}" | sort | uniq  > gfwlist.txt
         #sed -i '/^@@|/d;#!##/d;g#\!##/d' gfwlist.txt
-        
+        ad="$(curl -kLfsm 5 https://anti-ad.net/anti-ad-for-smartdns.conf)"
+        # ad=`echo $ad | sed  '/^#/d' `
+        echo -ne  $ad | sed  '/^#/d' | sort | uniq  > ad_smartdns.txt
         v4=`cat all_cn.txt | wc -l `
         v6=`cat all_cn_ipv6.txt  | wc -l `
         gfw=`cat gfwlist.txt | wc -l `
-        echo -ne " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw" > README.md
+        ad=`cat ad_smartdns.txt | wc -l `
+        echo -ne " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw \n AD_smartdns:$ad" > README.md
         rm -rf gfwlist.tmp
         
     - name: Upload firmware to release
