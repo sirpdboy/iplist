@@ -51,8 +51,8 @@ jobs:
         echo -e "${iplist}" | sort | uniq  > gfwlist.txt
         #sed -i '/^@@|/d;#!##/d;g#\!##/d' gfwlist.txt
         ads=$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-smartdns.conf)
-        #iplist=$(echo $ads | sed '/^#/d)
-        echo -e $ads | sort | uniq  > ad_smartdns.txt
+        iplist=$(echo $ads | sed '/^#/d)
+        echo  $iplist  > ad_smartdns.txt
         v4=`cat all_cn.txt | wc -l `
         v6=`cat all_cn_ipv6.txt  | wc -l `
         gfw=`cat gfwlist.txt | wc -l `
