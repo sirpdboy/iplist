@@ -39,7 +39,6 @@ jobs:
         chunzhen="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china.txt)"
         iplist="$cid\n${chunzhen}\n162.159.0.0/16\n"
         echo -e "${iplist}" | sort | uniq > all_cn.txt
-        162.159
         operator="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china6.txt)"
         clang="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_ipv6.txt)"
         iplist="$operator\n$clang"
