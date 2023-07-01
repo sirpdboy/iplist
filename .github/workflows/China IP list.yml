@@ -37,11 +37,13 @@ jobs:
         cid="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn.txt)"
         ipipnet="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/17mon/china_ip_list@master/china_ip_list.txt)"
         chunzhen="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china.txt)"
-        iplist="$cid\n${chunzhen}\n162.159.0.0/16\n"
+        pdipv4="cat pdipv4.txt"
+        iplist="$cid\n${chunzhen}\n${pdipv4}\n"
         echo -e "${iplist}" | sort | uniq > all_cn.txt
         operator="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china6.txt)"
         clang="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_ipv6.txt)"
-        iplist="$operator\n$clang"
+        pdipv6="cat pdipv6.txt"
+        iplist="$operator\n$clang${pdipv6}\n"
         echo -e "${iplist}" | sort | uniq > all_cn_ipv6.txt 
         # soldier="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt)"
         # gfwlist="$(curl -kLfsm 5 https://gitlab.com/gfwlist/gfwlist/raw/master/gfwlist.txt)"
