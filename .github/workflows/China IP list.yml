@@ -70,7 +70,6 @@ jobs:
           sha256sum all_cn.txt > all_cn.txt.sha256sum
           sha256sum all_cn_ipv6.txt > all_cn_ipv6.txt.sha256sum
           sha256sum gfwlist.txt > gfwlist.txt.sha256sum
-          sha256sum rules.zip > rules.zip.sha256sum
           sha256sum ad_smartdns.txt > ad_smartdns.txt.sha256sum
           sha256sum domains_cn.txt > domains_cn.txt.sha256sum
         echo -e " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n domains_cn:$cn \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw \n AD_smartdns:$ads" > README.md
