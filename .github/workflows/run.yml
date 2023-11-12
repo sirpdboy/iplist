@@ -11,10 +11,10 @@ jobs:
    runs-on: ubuntu-latest
 
    steps:
-    - name: Checkout the "hidden" branch of this repo
-      uses: actions/checkout@v4
+    - name: Checkout codebase
+      uses: actions/checkout@v3
       with:
-          ref: hidden
+          path: code
 
     - name: Set variables
       run: |
@@ -24,6 +24,9 @@ jobs:
           echo "CHINA_DOMAINS_URL=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf" >> $GITHUB_ENV
           echo "GEOSITE_CN_URL=https://raw.githubusercontent.com/yuumimi/rules/release/loon/cn.txt" >> $GITHUB_ENV
           sudo timedatectl set-timezone "Asia/Shanghai"
+    - uses: de-vri-es/setup-git-credentials@v2
+      with:
+        credentials: https://sirpdboy:${{ secrets.REPO_TOKEN }}@github.com/
 
     - name: Combine
       run: |
@@ -90,12 +93,6 @@ jobs:
           git commit -m "${{ env.RELEASE_NAME }}"
           git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
           git push -f -u origin release
-
-    - name: Purge jsdelivr CDN
-      run: |
-          for file in $(ls *.txt); do
-            curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/${file}"
-          done
 
     - name: Delete workflow runs
       uses: Mattraks/delete-workflow-runs@v2
