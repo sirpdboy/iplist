@@ -22,6 +22,8 @@ jobs:
           echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           echo "FILE=$PWD" >> $GITHUB_ENV
+          echo "CHINA_DOMAINS_URL=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf" >> $GITHUB_ENV
+          echo "GEOSITE_CN_URL=https://raw.githubusercontent.com/yuumimi/rules/release/loon/cn.txt" >> $GITHUB_ENV
           sudo timedatectl set-timezone "Asia/Shanghai"
     - uses: de-vri-es/setup-git-credentials@v2
       with:
@@ -29,9 +31,17 @@ jobs:
 
     - name: Combine
       run: |
-      
-        # ADS="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-smartdns.conf )"
-        #curl -kLfsm 3 -o ad_smartdns.txt https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-smartdns.conf
+        curl -sSL -O $CHINA_DOMAINS_URL
+        curl -sSL -O $GEOSITE_CN_URL
+        
+        #curl -sSL -O 'https://raw.githubusercontent.com/yuumimi/rules/release/loon/geolocation-!cn.txt'
+          # cat 'geolocation-!cn.txt' | sed '/#/d' | sed '/^\s*$/d' | sed 's@DOMAIN-SUFFIX,@@g;s@DOMAIN,@@g' > ./gfw.txt
+          
+          cat cn.txt | sed '/#/d' | sed '/^\s*$/d' | sed 's@DOMAIN-SUFFIX,@@g;s@DOMAIN,@@g' > ./cn_1.txt
+          cat accelerated-domains.china.conf | sed '/#/d' | sed 's@server=/@@g;s@/114.114.114.114@@g' > ./accelerated-domains.china.txt
+          cat cn_1.txt accelerated-domains.china.txt > temp-direct.txt
+          sort temp-direct.txt | uniq > domains_cn.txt
+          rm -rf accelerated-domains.china.conf cn.txt common.txt accelerated-domains.china.txt cn_1.txt temp-direct.txt
         curl -fsSL https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-smartdns.conf > ./ad_smartdns.txt
         sed -i '/^#/d' ad_smartdns.txt
         cid="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn.txt)"
@@ -55,7 +65,8 @@ jobs:
         v6=`cat all_cn_ipv6.txt  | wc -l `
         gfw=`cat gfwlist.txt | wc -l `
         ads=`cat ad_smartdns.txt | wc -l `
-        echo -e " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw \n AD_smartdns:$ads" > README.md
+        cn=`cat domains_cn.txt | wc -l `
+        echo -e " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n domains_cn:$cn \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw \n AD_smartdns:$ads" > README.md
         rm -rf gfwlist.tmp
         
     - name: Upload firmware to release
