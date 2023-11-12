@@ -66,6 +66,13 @@ jobs:
         gfw=`cat gfwlist.txt | wc -l `
         ads=`cat ad_smartdns.txt | wc -l `
         cn=`cat domains_cn.txt | wc -l `
+        
+          sha256sum all_cn.txt > all_cn.txt.sha256sum
+          sha256sum all_cn_ipv6.txt > all_cn_ipv6.txt.sha256sum
+          sha256sum gfwlist.txt > gfwlist.txt.sha256sum
+          sha256sum rules.zip > rules.zip.sha256sum
+          sha256sum ad_smartdns.txt > ad_smartdns.txt.sha256sum
+          sha256sum domains_cn.txt > domains_cn.txt.sha256sum
         echo -e " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n domains_cn:$cn \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw \n AD_smartdns:$ads" > README.md
         rm -rf gfwlist.tmp
         
@@ -80,11 +87,10 @@ jobs:
           
     - name: Git push assets to "release" branch
       run: |
-
           git init
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # git add  *.txt README.md
+          # git add  *.txt README.md *.sha256sum
           # git commit -m " Sync Update $(date +%Y-%m-%d" "%H:%M:%S)"
           # git push -f
 
