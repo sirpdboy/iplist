@@ -42,8 +42,9 @@ jobs:
           cat cn_1.txt accelerated-domains.china.txt > temp-direct.txt
           sort temp-direct.txt | uniq > domains_cn.txt
           rm -rf accelerated-domains.china.conf cn.txt common.txt accelerated-domains.china.txt cn_1.txt temp-direct.txt
-        curl -fsSL https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-smartdns.conf > ./ad_smartdns.txt
-        sed -i '/^#/d' ad_smartdns.txt
+        curl -fsSL https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-smartdns.conf > ./ad_list.txt
+        
+        sed -i '/^#/d' ad_list.txt
         cid="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn.txt)"
         ipipnet="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/17mon/china_ip_list@master/china_ip_list.txt)"
         chunzhen="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china.txt)"
@@ -64,13 +65,13 @@ jobs:
         v4=`cat all_cn.txt | wc -l `
         v6=`cat all_cn_ipv6.txt  | wc -l `
         gfw=`cat gfwlist.txt | wc -l `
-        ads=`cat ad_smartdns.txt | wc -l `
+        ads=`cat ad_list.txt | wc -l `
         cn=`cat domains_cn.txt | wc -l `
         
           sha256sum all_cn.txt > all_cn.txt.sha256sum
           sha256sum all_cn_ipv6.txt > all_cn_ipv6.txt.sha256sum
           sha256sum gfwlist.txt > gfwlist.txt.sha256sum
-          sha256sum ad_smartdns.txt > ad_smartdns.txt.sha256sum
+          sha256sum ad_smartdns.txt > ad_list.txt.sha256sum
           sha256sum domains_cn.txt > domains_cn.txt.sha256sum
         echo -e " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n domains_cn:$cn \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw \n AD_smartdns:$ads" > README.md
         rm -rf gfwlist.tmp
