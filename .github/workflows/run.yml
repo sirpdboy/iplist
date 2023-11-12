@@ -74,13 +74,14 @@ jobs:
         echo -e " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n domains_cn:$cn \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw \n AD_smartdns:$ads" > README.md
         rm -rf gfwlist.tmp
         
-    - name: Release and upload assets
-      uses: svenstaro/upload-release-action@v2
+        
+    - name: Upload firmware to release
+      uses: softprops/action-gh-release@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          release_name: ${{ env.RELEASE_NAME }}
-          tag: ${{ env.TAG_NAME }}
-          file_glob: true
+          name: ${{ env.RELEASE_NAME }}
+          tag_name: ${{ env.TAG_NAME }}
           files: ${{ env.FILE }}/*
           
     - name: Git push assets to "release" branch
