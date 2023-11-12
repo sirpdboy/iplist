@@ -42,7 +42,7 @@ jobs:
           cat cn_1.txt accelerated-domains.china.txt > temp-direct.txt
           sort temp-direct.txt | uniq > domains_cn.txt
           rm -rf accelerated-domains.china.conf cn.txt common.txt accelerated-domains.china.txt cn_1.txt temp-direct.txt
-        curl -fsSL https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-smartdns.conf > ./ad_list.txt
+        curl -fsSL https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-domains.txt > ./ad_list.txt
         
         sed -i '/^#/d' ad_list.txt
         cid="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn.txt)"
