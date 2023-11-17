@@ -55,7 +55,7 @@ jobs:
         echo -e "${iplist}" | sort | uniq > all_cn_ipv6.txt 
 
         YW5="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt)"
-        gfw=`echo $YW5 | base64 -d  | sort | uniq | sed '/^@@|/d;/^!/d;/^#/d'`
+        gfw=`echo $YW5 | base64 -d  | sort | uniq | sed '/^@@|/d;/^!/d;/^#/d;/\|/d;/\|\|/d;/\//d'`
         pexcngfw="$(curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/gfwlist/gfwlist.txt)"
         iplist="$gfw\n$pexcngfw"
         echo -e "${iplist}" | sort | uniq > gfwlist.txt
