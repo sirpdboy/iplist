@@ -53,12 +53,14 @@ jobs:
         pdipv6="$(curl -kLfsm 5 https://raw.githubusercontent.com/sirpdboy/iplist/main/pdipv6.txt)"
         iplist="$china6\n$clang6\n$chnroute6\n$pdipv6"
         echo -e "${iplist}" | sort | uniq > all_cn_ipv6.txt 
-
+        
         YW5="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt)"
-        gfw=`echo $YW5 | base64 -d  | sort | uniq | sed '/^@@|/d;/^!/d;/^#/d'` 
+        echo $YW5 | base64 -d  | sort | uniq  > gfwlist.txt
+        sed -i '/^@@|/d;/^!/d;/^#/d'  gfwlist.txt
         pexcngfw="$(curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/gfwlist/gfwlist.txt)"
-        iplist="$gfw\n$pexcngfw"
-        echo -e "${iplist}" | sort | uniq > gfwlist.txt
+        echo $pexcngfw  >> gfwlist.txt
+        #iplist="$gfw\n$pexcngfw"
+        #echo -e "${iplist}" | sort | uniq > gfwlist.txt
         v4=`cat all_cn.txt | wc -l `
         v6=`cat all_cn_ipv6.txt  | wc -l `
         gfw=`cat gfwlist.txt | wc -l `
