@@ -28,21 +28,25 @@ jobs:
 
     - name: Combine
       run: |
-        fdo="$(curl -kLfsm 5 https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf)"
-        yuumimi="$(curl -kLfsm 5 https://raw.githubusercontent.com/yuumimi/rules/release/loon/cn.txt)"
-        pexcndo="$(curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/chinalist/chinalist.txt)"
-        fdo=`echo $fdo  | sed '/#/d' | sed '/^\s*$/d' | sed 's@DOMAIN-SUFFIX,@@g;s@DOMAIN,@@g'`
-        yuumimi=`echo $yuumimi | sed '/#/d' | sed 's@server=/@@g;s@/114.114.114.114@@g'`
+        echo domain
+        fdo=`curl -kLfsm 5 https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf`
+        yuumimi=`curl -kLfsm 5 https://raw.githubusercontent.com/yuumimi/rules/release/loon/cn.txt`
+        pexcndo=`curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/chinalist/chinalist.txt`
+        fdo=`echo $fdo  | sed  -i '/#/d' |  sed  -i '/^\s*$/d' | sed 's@DOMAIN-SUFFIX,@@g;s@DOMAIN,@@g'`
+        yuumimi=`echo $yuumimi | sed -i '/#/d' | sed  -i 's@server=/@@g;s@/114.114.114.114@@g'`
         iplist="$yuumimi\n$pexcndo\n$fdo\n"
         echo -e "${iplist}" | sort | uniq > domains_cn.txt
+        echo ad
         curl -fsSL https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-domains.txt > ./ad_list.txt
         sed -i '/^#/d' ad_list.txt
+        echo ipv4
         cid="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn.txt)"
         pexcnv4="$(curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/chnroute/chnroute.txt )"
         chunzhen="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china.txt)"
         pdipv4="$(curl -kLfsm 5 https://raw.githubusercontent.com/sirpdboy/iplist/main/pdipv4.txt)"
         iplist="$cid\n${chunzhen}\n${pexcnv4}\n${pdipv4}\n"
         echo -e "${iplist}" | sort | uniq > all_cn.txt
+        echo ipv6
         operator="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china6.txt)"
         clang="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_ipv6.txt)"
         pexcnv6="$(curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/chnroute/chnroute6.txt )"
@@ -69,7 +73,7 @@ jobs:
         echo -e " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n domains_cn:$cn \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw \n AD_smartdns:$ads" > README.md
         ls
         rm -rf gfwlist.tmp 
-        rm -rf chinalist.txt accelerated-domains.china.conf cn.txt common.txt accelerated-domains.china.txt cn_1.txt temp-direct.txt
+        # rm -rf chinalist.txt accelerated-domains.china.conf cn.txt common.txt accelerated-domains.china.txt cn_1.txt temp-direct.txt
  
         
     - name: Upload firmware to release
