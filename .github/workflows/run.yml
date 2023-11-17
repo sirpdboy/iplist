@@ -32,35 +32,32 @@ jobs:
       run: |
         curl -sSL -O $CHINA_DOMAINS_URL
         curl -sSL -O $GEOSITE_CN_URL
-        
-        #curl -sSL -O 'https://raw.githubusercontent.com/yuumimi/rules/release/loon/geolocation-!cn.txt'
-          # cat 'geolocation-!cn.txt' | sed '/#/d' | sed '/^\s*$/d' | sed 's@DOMAIN-SUFFIX,@@g;s@DOMAIN,@@g' > ./gfw.txt
-          
+        curl -sSL-O https://raw.githubusercontent.com/pexcn/daily/gh-pages/chinalist/chinalist.txt
           cat cn.txt | sed '/#/d' | sed '/^\s*$/d' | sed 's@DOMAIN-SUFFIX,@@g;s@DOMAIN,@@g' > ./cn_1.txt
           cat accelerated-domains.china.conf | sed '/#/d' | sed 's@server=/@@g;s@/114.114.114.114@@g' > ./accelerated-domains.china.txt
-          cat cn_1.txt accelerated-domains.china.txt > temp-direct.txt
+          cat chinalist.txt cn_1.txt accelerated-domains.china.txt > temp-direct.txt
           sort temp-direct.txt | uniq > domains_cn.txt
-          rm -rf accelerated-domains.china.conf cn.txt common.txt accelerated-domains.china.txt cn_1.txt temp-direct.txt
+          ls
         curl -fsSL https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-domains.txt > ./ad_list.txt
         sed -i '/^#/d' ad_list.txt
         cid="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn.txt)"
-        ipipnet="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/17mon/china_ip_list@master/china_ip_list.txt)"
+        pexcnv4="$(curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/chnroute/chnroute.txt )"
         chunzhen="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china.txt)"
-        ls
-        #pdipv4=`cat pdipv4.txt`
-        iplist="$cid\n${chunzhen}\n"
+        pdipv4="$(curl -kLfsm 5 https://raw.githubusercontent.com/sirpdboy/iplist/main/pdipv4.txt)"
+        iplist="$cid\n${chunzhen}\n${pexcnv4}\n${pdipv4}\n"
         echo -e "${iplist}" | sort | uniq > all_cn.txt
         operator="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china6.txt)"
         clang="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_ipv6.txt)"
-        #pdipv6=`cat pdipv6.txt`
-        iplist="$operator\n$clang\n"
+        pexcnv6="$(curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/chnroute/chnroute6.txt )"
+        pdipv6="$(curl -kLfsm 5 https://raw.githubusercontent.com/sirpdboy/iplist/main/pdipv6.txt)"
+        iplist="$operator\n$clang\n${pexcnv4}\n${pdipv4}\n"
         echo -e "${iplist}" | sort | uniq > all_cn_ipv6.txt 
-        # soldier="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt)"
-        # gfwlist="$(curl -kLfsm 5 https://gitlab.com/gfwlist/gfwlist/raw/master/gfwlist.txt)"
-        # gfwlist=`echo "$gfwlist" | base64 -d `
+
         YW5="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt)"
-        echo $YW5 | base64 -d  | sort | uniq  > gfwlist.txt
-        sed -i '/^@@|/d;/^!/d;/^#/d'  gfwlist.txt
+        gfw=`echo $YW5 | base64 -d  | sort | uniq | sed -i '/^@@|/d;/^!/d;/^#/d'`
+        pexcngfw="$(curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/gfwlist/gfwlist.txt)"
+        iplist="$gfw\n$pexcngfw\n"
+        echo -e "${iplist}" | sort | uniq > gfwlist.txt
         v4=`cat all_cn.txt | wc -l `
         v6=`cat all_cn_ipv6.txt  | wc -l `
         gfw=`cat gfwlist.txt | wc -l `
@@ -73,8 +70,10 @@ jobs:
           sha256sum ad_list.txt > ad_list.txt.sha256sum
           sha256sum domains_cn.txt > domains_cn.txt.sha256sum
         echo -e " Update $(date +%Y-%m-%d" "%H:%M:%S) for bypass \n domains_cn:$cn \n ipv4:$v4 \n ipv6:$v6 \n GFW:$gfw \n AD_smartdns:$ads" > README.md
-        rm -rf gfwlist.tmp
-        
+        ls
+        rm -rf gfwlist.tmp 
+        rm -rf chinalist.txt accelerated-domains.china.conf cn.txt common.txt accelerated-domains.china.txt cn_1.txt temp-direct.txt
+ 
         
     - name: Upload firmware to release
       uses: softprops/action-gh-release@v1
