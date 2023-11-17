@@ -44,14 +44,14 @@ jobs:
         pexcnv4="$(curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/chnroute/chnroute.txt )"
         chunzhen="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china.txt)"
         pdipv4="$(curl -kLfsm 5 https://raw.githubusercontent.com/sirpdboy/iplist/main/pdipv4.txt)"
-        iplist="$cid\n${chunzhen}\n${pexcnv4}\n${pdipv4}"
+        iplist="$cid\n${chunzhen}\n$pexcnv4\n$pdipv4"
         echo -e "${iplist}" | sort | uniq > all_cn.txt
         echo ipv6
-        operator="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china6.txt)"
-        clang="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_ipv6.txt)"
-        pexcnv6="$(curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/chnroute/chnroute6.txt )"
+        china6="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china6.txt)"
+        clang6="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_ipv6.txt)"
+        chnroute6="$(curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/chnroute/chnroute6.txt )"
         pdipv6="$(curl -kLfsm 5 https://raw.githubusercontent.com/sirpdboy/iplist/main/pdipv6.txt)"
-        iplist="$operator\n$clang\n${pexcnv4}\n${pdipv4}"
+        iplist="$china6\n$clang6\n$chnroute6\n$pdipv6"
         echo -e "${iplist}" | sort | uniq > all_cn_ipv6.txt 
 
         YW5="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt)"
