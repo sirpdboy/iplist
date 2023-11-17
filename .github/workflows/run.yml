@@ -32,7 +32,7 @@ jobs:
       run: |
         curl -sSL -O $CHINA_DOMAINS_URL
         curl -sSL -O $GEOSITE_CN_URL
-        curl -sSL-O https://raw.githubusercontent.com/pexcn/daily/gh-pages/chinalist/chinalist.txt
+        curl -sSL -O https://raw.githubusercontent.com/pexcn/daily/gh-pages/chinalist/chinalist.txt
           cat cn.txt | sed '/#/d' | sed '/^\s*$/d' | sed 's@DOMAIN-SUFFIX,@@g;s@DOMAIN,@@g' > ./cn_1.txt
           cat accelerated-domains.china.conf | sed '/#/d' | sed 's@server=/@@g;s@/114.114.114.114@@g' > ./accelerated-domains.china.txt
           cat chinalist.txt cn_1.txt accelerated-domains.china.txt > temp-direct.txt
