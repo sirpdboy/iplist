@@ -29,9 +29,9 @@ jobs:
     - name: Combine
       run: |
         echo domain
-        fdo=`curl -kLfsm 5 https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf`
-        yuumimi=`curl -kLfsm 5 https://raw.githubusercontent.com/yuumimi/rules/release/loon/cn.txt`
-        pexcndo=`curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/chinalist/chinalist.txt`
+        fdo=`curl -kLfsm 5 https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf `
+        yuumimi=`curl -kLfsm 5 https://raw.githubusercontent.com/yuumimi/rules/release/loon/cn.txt `
+        pexcndo=`curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/chinalist/chinalist.txt `
         yuumimi=`echo $yuumimi | sed -i '/#/d;/^!/d;s/DOMAIN-SUFFIX,//g;s/DOMAIN,//g'`
         fdo=`echo $fdo | sed -i '/#/d;s@server=/@@g;s@/114.114.114.114@@g'`
         iplist="$yuumimi\n$pexcndo\n$fdo\n"
