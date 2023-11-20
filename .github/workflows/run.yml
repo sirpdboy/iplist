@@ -104,13 +104,13 @@ jobs:
           retain_days: 1
           keep_minimum_runs: 1
 
-    #- name: Remove old Releases
-    #  uses: dev-drprasad/delete-older-releases@v0.2.1
-    #  with:
-    #      keep_latest: 1
-    #      delete_tags: true
-     # env:
-     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Remove old Releases
+      uses: dev-drprasad/delete-older-releases@v0.2.1
+      with:
+          keep_latest: 1
+          delete_tags: true
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Delete Artifacts
       uses: geekyeggo/delete-artifact@v2
