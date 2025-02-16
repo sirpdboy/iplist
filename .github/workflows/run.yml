@@ -34,7 +34,7 @@ jobs:
         pexcndo=`curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/chinalist/chinalist.txt `
         yuumimi=`echo $yuumimix | sed '/#/d;/^!/d;s/DOMAIN-SUFFIX,//g;s/DOMAIN,//g'`
         fdo=`echo $fdox | sed '/#/d;s@server=/@@g;s@/114.114.114.114@@g'`
-        iplist="$yuumimi\n$pexcndo\n$fdo\n"
+        iplist="$yuumimi\n"
         echo -e "${iplist}" | sort | uniq > domains_cn.txt
         echo ad
         curl -fsSL https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD/anti-ad-domains.txt > ./ad_list.txt
@@ -44,21 +44,21 @@ jobs:
         pexcnv4="$(curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/chnroute/chnroute.txt )"
         chunzhen="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china.txt)"
         pdipv4="$(curl -kLfsm 5 https://raw.githubusercontent.com/sirpdboy/iplist/main/pdipv4.txt)"
-        iplist="$cid\n${chunzhen}\n$pexcnv4\n$pdipv4\n"
+        iplist="$cid\n"
         echo -e "${iplist}" | sort | uniq > all_cn.txt
         echo ipv6
         china6="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/gaoyifan/china-operator-ip@ip-lists/china6.txt)"
         clang6="$(curl -kLfsm 5 https://ispip.clang.cn/all_cn_ipv6.txt)"
         chnroute6="$(curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/chnroute/chnroute6.txt )"
         pdipv6="$(curl -kLfsm 5 https://raw.githubusercontent.com/sirpdboy/iplist/main/pdipv6.txt)"
-        iplist="$china6\n$clang6\n$chnroute6\n$pdipv6\n"
+        iplist="$clang6\n"
         echo -e "${iplist}" | sort | uniq > all_cn_ipv6.txt 
         
         YW5="$(curl -kLfsm 5 https://fastly.jsdelivr.net/gh/YW5vbnltb3Vz/domain-list-community@release/gfwlist.txt)"
         echo $YW5 | base64 -d  | sort | uniq  > gfwlist.txt
         sed -i '/^@@|/d;/^!/d;/^#/d'  gfwlist.txt
         pexcngfw="$(curl -kLfsm 5 https://raw.githubusercontent.com/pexcn/daily/gh-pages/gfwlist/gfwlist.txt)"
-        echo $pexcngfw  >> gfwlist.txt
+        echo $pexcngfw  > gfwlist.txt
         #iplist="$gfw\n$pexcngfw\n"
         #echo -e "${iplist}" | sort | uniq > gfwlist.txt
         v4=`cat all_cn.txt | wc -l `
